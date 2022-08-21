@@ -51,8 +51,6 @@ Finish the wizard
 
 ![](https://i.imgur.com/grcmM4p.png)
 
-_Note: You can delete this certificate from the local store now if you are loading the driver before the OS_
-
 ### 3. USB Drive
 
 Put the Certificate onto a USB stick, we are going to import the Certificate into the `BIOS` so the Kernel will trust our `Signature` and run our driver as if Microsoft had signed it themselves.
@@ -77,9 +75,21 @@ The certificate you just added to the `BIOS` can now be used for "Extended Valid
 
 ![](https://i.imgur.com/v3qcVeM.jpg)
 
-### 6. Sign your Driver
+### 6. Export the PFX File
 
-Restart your computer and sign your kernel driver with `TheCert`, You are done.
+![](https://i.imgur.com/BJ3iyGw.png)
+
+Export the Certificate again, this time you want to export the private key.
+
+![](https://i.imgur.com/WLuWTtN.png)
+
+### 7. Sign your Driver
+
+![](https://i.imgur.com/g2A5Ibj.png)
+
+Restart your computer and sign your kernel driver with `TheCertComplete.pfx`, You are done.
+
+_It is now safe to remove the certificate from the Local Certificate Store (`certlm.msc`)_
 
 ------
 
