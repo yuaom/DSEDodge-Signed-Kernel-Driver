@@ -57,7 +57,9 @@ _Note: You can delete this certificate from the local store now if you are loadi
 
 Put the Certificate onto a USB stick, we are going to import the Certificate into the `BIOS` so the Kernel will trust our `Signature` and run our driver as if Microsoft had signed it themselves.
 
-### 4. Secure Boot Menu
+### 4. Restart PC and Enter the Bios
+
+Open the `Secure Boot Menu`
 
 _(These steps may vary slightly depending on your BIOS)_
 
@@ -92,5 +94,9 @@ Tested on a motherboard with the `Z490 Chipset`
 This allows you to create drivers the OS isn't even aware of again.
 
 This is not an exploit.
+
+This is a proof of concept, I don't recommend doing it until you fully understand what you are doing.
+
+Extended Validation only exists in your head.
 
 #### Have Fun and remember, Gödel's theorem suggests certain information can travel faster than the speed of light.
