@@ -59,15 +59,13 @@ Put the Certificate onto a USB stick, we are going to import the Certificate int
 
 ### 4. Restart PC and Enter the Bios
 
-Open the `Secure Boot Menu`
+_(These steps may vary slightly depending on your BIOS but the concept is the same)_
 
-_(These steps may vary slightly depending on your BIOS)_
+Select the `Secure Boot Menu` in your Bios
 
-Enter the `Key Management` section under the Secure Boot menu in your Bios
+In the `Key Management` section select `Authorized Signatures` (Or wherever the `Microsoft Production PCA Certificate` is located)
 
-Press Enter on `Authorized Signatures`
-
-Select `Append/Add` from the Menu
+Select `Append/Add` from the Menu that pops up
 
 Locate `TheCert` on your `USB` and select it
 
