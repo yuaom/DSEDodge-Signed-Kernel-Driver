@@ -71,17 +71,19 @@ Locate `TheCert` on your `USB` and select it
 
 You'll be prompted to confirm you want to update the Certificate Store, Select `Yes`.
 
-## 5. Success, We are now an Extended Validator
+### 5. Success, We are now an "Extended Validator" on this PC.
 
-The certificate you just added to the `BIOS` can now be used for Extended Validation of Kernel Drivers without using any exploits, essentially bypassing Driver Signing Enforcement (DSE) because there is no third party involved.
+The certificate you just added to the `BIOS` can now be used for "Extended Validation" of Kernel Drivers without using any exploits, essentially bypassing Driver Signing Enforcement (DSE) because there is no third party involved and you just sign it yourself without the extra steps.
 
 ![](https://i.imgur.com/v3qcVeM.jpg)
 
-## 6. Sign your Driver
+### 6. Sign your Driver
 
 Restart your computer and sign your kernel driver with `TheCert`, You are done.
 
-# Considerations
+------
+
+### Considerations
 
 You could specially craft a Bios Update to add this certificate and then Flash the BIOS if your motherboard doesn't have this menu option because the platform itself supports changing the certificates in the store.
 
@@ -89,12 +91,16 @@ This certificate (and Microsofts one) don't need to exist in your local store.
 
 Tested on a motherboard with the `Z490 Chipset`
 
-This allows you to create drivers the OS isn't even aware of again.
+Extended Validation only exists in your mind.
 
-This is not an exploit.
+### Caution
+
+This allows you to create drivers the OS isn't even aware of again.
 
 This is a proof of concept, I don't recommend doing it until you fully understand what you are doing.
 
-Extended Validation only exists in your head.
+You shouldn't do this unless your motherboard has a way to flash a new `BIOS` onto it without needing an OS.
+
+Resetting the CMOS (the pins) won't fix this if something goes wrong, you need to reflash the entire `BIOS`
 
 #### Have Fun and remember, Gödel's theorem suggests certain information can travel faster than the speed of light.
