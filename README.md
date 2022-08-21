@@ -6,7 +6,7 @@ Code Signing is an amazing thing, But it has a glaring flaw depending on your mo
 
 ### 1. Create the Certificate
 
-_If you already own a valid code signing certificate you can use then skip to Step 3_
+_If you already own any valid code signing certificate you can use that instead and should skip to Step 3_
 
 Open Powershell and enter the following to create a Code Signing Certificate that is valid for 2 Years and meets the [EFI_CERT_X509](https://download.lenovo.com/pccbbs/thinkcentre_pdf/certificate_based_bios_management_guide.pdf) spec
 
