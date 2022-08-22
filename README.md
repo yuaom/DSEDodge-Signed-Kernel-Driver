@@ -6,7 +6,7 @@ Code Signing is an amazing thing, But it has a glaring flaw depending on your mo
 
 _Before you start you need to install the [Windows Driver Kit](https://docs.microsoft.com/en-us/windows-hardware/drivers/download-the-wdk)_
 
-### 1. Creating the Certificates
+### 1. [Creating the Certificates](https://github.com/HypsyNZ/DSEDodge-Signed-Kernel-Driver/tree/main/CERT#readme)
 
 To begin, we need to create our own `CA` and `SPC` and a `PFX` we can use as a `Production Certificate` later.
 
