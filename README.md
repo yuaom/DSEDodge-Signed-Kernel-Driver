@@ -10,6 +10,8 @@ _Before you start you need to install the [Windows Driver Kit](https://docs.micr
 
 To begin, we need to create our own `CA` and `SPC` and a `PFX` we can use as a `Production Certificate` later.
 
+_You should rename these_
+
 ```ps
 makecert -r -pe -n "CN=Demo_CA_Root" -ss CA -sr CurrentUser ^
    -a sha256 -cy authority -sky signature ^
