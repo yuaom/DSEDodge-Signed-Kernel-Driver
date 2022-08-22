@@ -96,6 +96,10 @@ With your `CA Root Certificate` in `Authorized Signatures` in the `BIOS` the Ker
 
 ------
 
-Tested on a motherboard with the `Z490 Chipset`
+Tested on a motherboard with the `Z490 Chipset` using [`Windows 10 Professional - Full Strip & Lockdown Edition - 21H2`](https://github.com/HypsyNZ/ISOKIT/tree/master/21H2)
+
+This may not work on earlier chipsets, It may be remove it later ones.
+
+Whether this works or not totally depends on your Motherboard/CPU combination.
 
 #### Have Fun and remember, Gödel's theorem suggests certain information can travel faster than the speed of light.
