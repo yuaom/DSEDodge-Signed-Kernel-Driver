@@ -4,56 +4,31 @@
 
 Code Signing is an amazing thing, But it has a glaring flaw depending on your motherboard which allows you to run Test Signed Kernel Drivers in a full trust environment with no indication to the OS that something may be wrong.
 
-### 1. Create the Certificate
+_Before you start you need to install the [Windows Driver Kit](https://docs.microsoft.com/en-us/windows-hardware/drivers/download-the-wdk)_
 
-_If you already own any valid code signing certificate you can use that instead and should skip to Step 3_
+### 1. Creating the Certificates
 
-Open Powershell and enter the following to create a Code Signing Certificate that is valid for 2 Years and meets the [EFI_CERT_X509](https://download.lenovo.com/pccbbs/thinkcentre_pdf/certificate_based_bios_management_guide.pdf) spec
+To begin, we need to create our own `CA` and `SPC` and a `PFX` we can use as a `Production Certificate` later.
 
 ```ps
-# Define EFI_CERT_X509
-$certSplat = @{
-	DnsName = 'TheCert'
-	KeyUsage = @('KeyEncipherment','DataEncipherment','KeyAgreement','CRLSign', 'CertSign', 'KeyAgreement', 'DigitalSignature')
-	Type = 'CodeSigningCert'
-	NotAfter = (Get-Date).AddYears(2)
-  	KeyAlgorithm = 'RSA' 
-  	KeyLength = 2048
-}
+makecert -r -pe -n "CN=Demo_CA_Root" -ss CA -sr CurrentUser ^
+   -a sha256 -cy authority -sky signature ^
+   -sv Demo_CA_Root.pvk Demo_CA_Root.cer
 
-# Create the self-signed EFI_CERT_X509
-$cert = New-SelfSignedCertificate @certSplat
+makecert -pe -n "CN=Demo_SPC_Code_Signing" -a sha256 -cy end ^
+   -sky signature ^
+   -ic Demo_CA_Root.cer -iv Demo_CA_Root.pvk ^
+   -sv Demo_SPC_Code_Signing.pvk Demo_SPC_Code_Signing.cer ^
+   -eku 1.3.6.1.5.5.7.3.3
+
+pvk2pfx -pvk Demo_SPC_Code_Signing.pvk -spc Demo_SPC_Code_Signing.cer ^
+   -pfx Demo_SPC_PFX.pfx ^
+   -po x
 ```
-
-![](https://i.imgur.com/WpNQ3rD.png)
-
-### 2. Export the Certificate
-
-Run `certlm.msc`
-
-![](https://i.imgur.com/WnZa3Px.png)
-
-Select `Personal Certificates`
-
-Open the Certificate and Select "Copy to File" on the "Details" tab.
-
-![](https://i.imgur.com/3UJtxyS.png)
-
-Complete the Wizard and when prompted select "No" to exporting the private key.
-
-![](https://i.imgur.com/Jdy9W4d.png) 
-
-Leave everything else as defaults and select a filename
-
-![](https://i.imgur.com/5K309kR.png)
-
-Finish the wizard
-
-![](https://i.imgur.com/grcmM4p.png)
 
 ### 3. USB Drive
 
-Put the Certificate onto a USB stick, we are going to import the Certificate into the `BIOS` so the Kernel will trust our `Signature` and run our driver as if Microsoft had signed it themselves.
+Put the `Demo_SPC_Code_Signing.cer` and `Demo_CA_Root.cer` Certificate onto a USB stick, we are going to import the Certificates into the `BIOS` so the Kernel will trust our `Signature` and install/run our driver as if Microsoft had signed it themselves.
 
 ### 4. Restart PC and Enter the Bios
 
@@ -65,52 +40,52 @@ In the `Key Management` section select `Authorized Signatures` (Or wherever the 
 
 Select `Append/Add` from the Menu that pops up
 
-Locate `TheCert` on your `USB` and select it
+Locate `Demo_SPC_Code_Signing.cer` and `Demo_CA_Root.cer` on your `USB`, pressing enter twice when selecting them.
 
-You'll be prompted to confirm you want to update the Certificate Store, Select `Yes`.
+The second time your press enter you'll be prompted to confirm you want to update the Certificate Store, Select `Yes`.
 
 ### 5. Success, We are now an "Extended Validator" on this PC.
 
-The certificate you just added to the `BIOS` can now be used for "Extended Validation" of Kernel Drivers without using any exploits, essentially bypassing Driver Signing Enforcement (DSE) because there is no third party involved and you just sign it yourself without the extra steps.
+The certificates you just added to the `BIOS` can now be used for "Extended Validation" of Kernel Drivers without using any exploits, essentially bypassing Driver Signing Enforcement (DSE) because there is no third party involved and you just sign it yourself without the extra steps.
 
 ![](https://i.imgur.com/v3qcVeM.jpg)
 
-### 6. Export the PFX File
+### 6. Trust the CA Certificate
 
-![](https://i.imgur.com/BJ3iyGw.png)
+Restart the computer and open the `Demo_CA_Root` certificate
 
-Export the Certificate again, this time you want to export the private key.
+Install the certificate to the `Trusted Root`
 
-![](https://i.imgur.com/WLuWTtN.png)
+Now drivers signed by `Demo_SPC_PFX.pfx` will be trusted.
 
-### 7. Sign your Driver
+### 7. BUILDING THE DRIVER
 
-![](https://i.imgur.com/g2A5Ibj.png)
+Now you can Production Sign your driver instead of Test Signing
 
-Restart your computer and sign your kernel driver with `TheCertComplete.pfx`, You are done.
+`Demo_SPC_Code_Signing` is the `Cross-Signing Certificate`
 
-_It is now safe to remove the certificate from the Local Certificate Store (`certlm.msc`)_
+`Demo_SPC_PFX.pfx` is the `Production Certificate`
+
+![](https://i.imgur.com/CSzLRM7.png)
+
+### 7. CREATE AND SIGN THE SECURITY CATALOG
+
+DSE will stop us from installing the Kernel Driver if the catalog isn't signed correctly, manually run these commands.
+
+```cmd
+inf2cat /os:10_x64 /driver:.\x64\Release
+
+SignTool sign /fd sha256 /f .\CERT\Demo_SPC_PFX.pfx /p x /v .\x64\Release\KMDFDriver\kmdfdriver.cat
+```
+
+### 8. Install your Driver
+
+Now you can install and run your driver without configuring [BCEDIT](https://docs.microsoft.com/en-us/windows-hardware/drivers/install/the-testsigning-boot-configuration-option)
+
+![](https://i.imgur.com/w52wRtC.png)
 
 ------
 
-### Considerations
-
-You could specially craft a Bios Update to add this certificate and then Flash the BIOS if your motherboard doesn't have this menu option because the platform itself supports changing the certificates in the store.
-
-This certificate (and Microsofts one) don't need to exist in your local store.
-
 Tested on a motherboard with the `Z490 Chipset`
-
-Extended Validation only exists in your mind.
-
-### Caution
-
-This allows you to create drivers the OS isn't even aware of again.
-
-This is a proof of concept, I don't recommend doing it until you fully understand what you are doing.
-
-You shouldn't do this unless your motherboard has a way to flash a new `BIOS` onto it without needing an OS.
-
-Resetting the CMOS (the pins) won't fix this if something goes wrong, you need to reflash the entire `BIOS`
 
 #### Have Fun and remember, Gödel's theorem suggests certain information can travel faster than the speed of light.
