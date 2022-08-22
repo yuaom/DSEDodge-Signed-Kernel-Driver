@@ -56,7 +56,11 @@ The certificates you just added to the `BIOS` can now be used for "Extended Vali
 
 Restart the computer and open the `Demo_CA_Root` certificate
 
-Install the certificate to the `Trusted Root`
+![](https://i.imgur.com/xtpSmeb.png)
+
+Install the certificate to the `Trusted Root` of the `Local Machine`
+
+![](https://i.imgur.com/VMEsUtF.png)
 
 Now drivers signed by `Demo_SPC_PFX.pfx` will be trusted.
 
