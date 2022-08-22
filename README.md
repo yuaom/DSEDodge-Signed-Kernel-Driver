@@ -44,7 +44,7 @@ Select `Append/Add` from the Menu that pops up
 
 Locate `Demo_SPC_Code_Signing.cer` and `Demo_CA_Root.cer` on your `USB`, pressing enter twice when selecting them.
 
-The second time your press enter you'll be prompted to confirm you want to update the Certificate Store, Select `Yes`.
+The second time you press enter you'll be prompted to confirm you want to update the Certificate Store, Select `Yes`.
 
 ### 5. Success, We are now an "Extended Validator" on this PC.
 
@@ -54,7 +54,7 @@ The certificates you just added to the `BIOS` can now be used for "Extended Vali
 
 ### 6. Trust the CA Certificate
 
-Restart the computer and open the `Demo_CA_Root` certificate
+Restart the computer and open the `Demo_CA_Root.cer` certificate
 
 ![](https://i.imgur.com/xtpSmeb.png)
 
@@ -68,7 +68,7 @@ Now drivers signed by `Demo_SPC_PFX.pfx` will be trusted.
 
 Now you can Production Sign your driver instead of Test Signing
 
-`Demo_SPC_Code_Signing` is the `Cross-Signing Certificate`
+`Demo_SPC_Code_Signing.cer` is the `Cross-Signing Certificate`
 
 `Demo_SPC_PFX.pfx` is the `Production Certificate`
 
