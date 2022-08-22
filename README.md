@@ -48,7 +48,7 @@ The second time your press enter you'll be prompted to confirm you want to updat
 
 The certificates you just added to the `BIOS` can now be used for "Extended Validation" of Kernel Drivers without using any exploits, essentially bypassing Driver Signing Enforcement (DSE) because there is no third party involved and you just sign it yourself without the extra steps.
 
-![](https://i.imgur.com/v3qcVeM.jpg)
+![](https://i.imgur.com/ydRADjq.jpg)
 
 ### 6. Trust the CA Certificate
 
