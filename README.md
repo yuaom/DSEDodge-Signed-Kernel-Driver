@@ -90,6 +90,10 @@ Now you can install and run your driver without configuring [BCEDIT](https://doc
 
 ![](https://i.imgur.com/w52wRtC.png)
 
+### 9. Run your Driver
+
+With your `CA Root Certificate` in `Authorized Signatures` in the `BIOS` the Kernel won't stop your Driver from running and you can make `Production Certificates` whenever you want for use on your own PC.
+
 ------
 
 Tested on a motherboard with the `Z490 Chipset`
